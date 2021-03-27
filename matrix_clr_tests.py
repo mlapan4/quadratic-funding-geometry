@@ -1,6 +1,6 @@
 import unittest
-import autograd.numpy as np
 from matrix_clr import *
+import numpy as np
 
 
 class TestMatrixCLRMethods(unittest.TestCase):
@@ -9,31 +9,31 @@ class TestMatrixCLRMethods(unittest.TestCase):
         self.ex_1 = np.array([[1.0, 1.0], [1.0, 1.0]])
         self.ex_2 = np.array([[1.0, 1.0], [0, 0]])
         self.ex_3 = np.array([[1.0, 1.0], [1.0, 0]])
-        self.trust_values = np.ones(2, 2)
+        self.trust_values = np.ones((2, 2))
 
     def test_pairwise_coord(self):
         # compare computed values to those by hand
         TOL = 0.001  # error tolerance
         pc_ex_1 = pairwise_coord(self.ex_1, 0, 1)
-        err_1 = np.abs(pc_ex_1 - np.float(1 / 3))
+        err_1 = np.abs(pc_ex_1 - 1. / 3)
         self.assertTrue(err_1 < TOL)
         pc_ex_2 = pairwise_coord(self.ex_2, 0, 1)
-        err_2 = np.abs(pc_ex_2 - np.float(1 / 2))
+        err_2 = np.abs(pc_ex_2 - 1. / 2)
         self.assertTrue(err_2 < TOL)
         pc_ex_3 = pairwise_coord(self.ex_3, 0, 1)
-        err_3 = np.abs(pc_ex_3 - np.float(1 / 2))
+        err_3 = np.abs(pc_ex_3 - 1. / 2)
         self.assertTrue(err_3 < TOL)
 
     def test_calc_pairwise_coord_mat(self):
         TOL = 0.001  # error tolerance
         fcalc_mat1 = calc_pairwise_coord_mat(self.ex1)
-        fcalc_mat1_entry = mat1[0, 0]
+        fcalc_mat1_entry = fcalc_mat1[0, 0]
         handcalc_mat1_entry = np.float(1 / 3)
         err1 = np.abs(fcalc_mat1_entry - handcalc_mat1_entry)
         self.assertTrue(err1 < TOL)
-        self.assertEqual(mat1[0, 1], 0)
-        self.assertEqual(mat1[1, 0], 0)
-        self.assertEqual(mat1[1, 1], 0)
+        self.assertEqual(fcalc_mat1[0, 1], 0)
+        self.assertEqual(fcalc_mat1[1, 0], 0)
+        self.assertEqual(fcalc_mat1[1, 1], 0)
         mat2 = calc_pairwise_coord_mat(self.ex2)
         fcalc_mat2_entry = mat2[0, 0]
         handcalc_mat2_entry = np.float(1.2)
@@ -65,7 +65,7 @@ class TestMatrixCLRMethods(unittest.TestCase):
         err_ex1_grant0 = np.abs(ex1_grant0[0, 1] - 1.0)
         self.assertTrue(err_ex1_grant0 < TOL)
         ex1_grant1 = calc_pairwise_term_mat(self.ex1, 1)
-        err_ex1_grant1 = np.abs(ex1_grant0[0, 1] - 1.0)
+        err_ex1_grant1 = np.abs(ex1_grant1[0, 1] - 1.0)
         self.assertTrue(err_ex1_grant1 < TOL)
         ex2_grant0 = calc_pairwise_term_mat(self.ex2, 0)
         err_ex2_grant0 = np.abs(ex2_grant0[0, 1] - 1.0)
@@ -76,6 +76,7 @@ class TestMatrixCLRMethods(unittest.TestCase):
         ex3_grant0 = calc_pairwise_term_mat(self.ex3, 0)
         err_ex3_grant0 = np.abs(ex3_grant0[0, 1] - 1.0)
         self.assertTrue(err_ex3_grant0 < TOL)
+        ex3_grant1 = calc_pairwise_term_mat(self.ex3, 1)
         err_ex3_grant1 = np.abs(ex3_grant1[0, 1] - 1.0)
         self.assertTrue(err_ex3_grant1 < TOL)
 
@@ -97,3 +98,7 @@ class TestMatrixCLRMethods(unittest.TestCase):
         handcalc_ex2_gr0_val = 0.0
         err_ex2_grant1 = np.abs(fcalc_ex2_gr0_val - handcalc_ex2_gr0_val)
         self.assertTrue(err_ex2_grant1 < TOL)
+
+
+if __name__ == '__main__':
+    unittest.main()
